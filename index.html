@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Máquina de Teste</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f0f0f0;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        pre {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ver Máquina de Teste</h1>
+    <button onclick="fetchMachine()">Ver Máquina de Teste</button>
+    <pre id="output">A resposta aparecerá aqui...</pre>
+
+    <script>
+        async function fetchMachine() {
+            try {
+                const response = await fetch('https://vendingreports-production.up.railway.app/api/v1/machines/2', {
+                    method: 'GET',
+                    redirect: 'follow' // Tenta seguir redirecionamentos
+                });
+
+                if (!response.ok) {
+                    throw new Error('Erro ao buscar a máquina. Status: ' + response.status);
+                }
+
+                const data = await response.json();
+                document.getElementById('output').textContent = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('output').textContent = 'Erro: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>
