@@ -48,18 +48,31 @@
 
                 const data = await response.json();
 
-                // Verificar se há produtos antes de exibir
-                if (data.products && data.products.length > 0) {
-                    console.log("Produtos encontrados:", data.products);
-                } else {
-                    console.log("Nenhum produto encontrado.");
+                let result = '';
+
+                // Exibir os detalhes da máquina (exceto produtos)
+                for (const [key, value] of Object.entries(data)) {
+                    // Ignorar o campo 'products' por enquanto
+                    if (key !== 'products') {
+                        result += `${key}: ${value}\n`;
+                    }
                 }
 
-                // Formata a resposta JSON com indentação de 2 espaços para melhor legibilidade
-                const formattedData = JSON.stringify(data, null, 2);
+                // Se existirem produtos, iterar e exibi-los
+                if (data.products && data.products.length > 0) {
+                    result += '\nProdutos:\n';
+                    data.products.forEach((product, index) => {
+                        result += `Produto ${index + 1}:\n`;
+                        for (const [key, value] of Object.entries(product)) {
+                            result += `  ${key}: ${value}\n`;
+                        }
+                    });
+                } else {
+                    result += '\nNenhum produto encontrado.\n';
+                }
 
-                // Exibe os dados formatados no elemento <pre>
-                document.getElementById('output').textContent = formattedData;
+                // Exibir a saída formatada no elemento <pre>
+                document.getElementById('output').textContent = result;
 
             } catch (error) {
                 document.getElementById('output').textContent = 'Erro ao buscar a máquina: ' + error.message;
