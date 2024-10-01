@@ -47,12 +47,20 @@
                 });
 
                 const data = await response.json();
-                // Cria uma string formatada com chaves e valores
-                let result = '';
-                for (const [key, value] of Object.entries(data)) {
-                    result += `${key}: ${value}\n`; // Exibe chave e valor
+
+                // Verificar se há produtos antes de exibir
+                if (data.products && data.products.length > 0) {
+                    console.log("Produtos encontrados:", data.products);
+                } else {
+                    console.log("Nenhum produto encontrado.");
                 }
-                document.getElementById('output').textContent = result;
+
+                // Formata a resposta JSON com indentação de 2 espaços para melhor legibilidade
+                const formattedData = JSON.stringify(data, null, 2);
+
+                // Exibe os dados formatados no elemento <pre>
+                document.getElementById('output').textContent = formattedData;
+
             } catch (error) {
                 document.getElementById('output').textContent = 'Erro ao buscar a máquina: ' + error.message;
             }
